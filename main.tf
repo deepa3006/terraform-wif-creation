@@ -18,7 +18,7 @@ resource "google_project_service" "project_required_services" {
   for_each = toset([
     "iam",
     "iamcredentials",
-    "identitytoolkit",
+    #"identitytoolkit",
     "serviceusage"
   ])
   project = "utility-cumulus-372111"
