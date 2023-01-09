@@ -75,6 +75,7 @@ data "google_iam_policy" "wif_service_account_policy" {
     members = [
       "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.wif_pool.name}/attribute.ref_type/branch",
     ]
+    depends_on         = [google_iam_workload_identity_pool.wif_pool]
   }
 }
 
