@@ -14,19 +14,19 @@ provider "google" {
   zone    = "us-central1"
 }
 
-# resource "google_project_service" "project_required_services" {
-#   for_each = toset([
-#     "iam",
-#     "iamcredentials",
-#     "identitytoolkit",
-#     "serviceusage"
-#   ])
-#   project = "utility-cumulus-372111"
-#   service = "${each.value}.googleapis.com"
-#   # (Optional) If true, services that are enabled and which depend on this service should also be disabled when this service is destroyed.
-#   # If false or unset, an error will be generated if any enabled services depend on this service when destroying it.
-#   disable_dependent_services = true
-# }
+resource "google_project_service" "project_required_services" {
+  for_each = toset([
+    "iam",
+    "iamcredentials",
+    "identitytoolkit",
+    "serviceusage"
+  ])
+  project = "utility-cumulus-372111"
+  service = "${each.value}.googleapis.com"
+  # (Optional) If true, services that are enabled and which depend on this service should also be disabled when this service is destroyed.
+  # If false or unset, an error will be generated if any enabled services depend on this service when destroying it.
+  disable_dependent_services = true
+}
 
 resource "google_iam_workload_identity_pool" "wif_pool" {
   project                   = "utility-cumulus-372111"
