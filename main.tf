@@ -28,26 +28,26 @@ resource "google_project_service" "project_required_services" {
   disable_dependent_services = true
 }
 
-resource "google_iam_workload_identity_pool" "wif_pool" {
+resource "google_iam_workload_identity_pool" "wif_pool1" {
   project                   = "utility-cumulus-372111"
   provider                  = google-beta
-  workload_identity_pool_id = "github-pool"
-  display_name              = "Github Identity Pool"
-  description               = "Identity pool for Github Actions"
+  workload_identity_pool_id = "github-pool1"
+  display_name              = "Github Identity Pool1"
+  description               = "Identity pool for Github Actions1"
   disabled                  = false
 }
 
-resource "google_iam_workload_identity_pool_provider" "wif_provider" {
+resource "google_iam_workload_identity_pool_provider" "wif_provider1" {
   depends_on = [
-    google_iam_workload_identity_pool.wif_pool
+    google_iam_workload_identity_pool.wif_pool1
   ]
   provider                           = google-beta
   project                            = "utility-cumulus-372111"
-  workload_identity_pool_id          = google_iam_workload_identity_pool.wif_pool.workload_identity_pool_id
-  workload_identity_pool_provider_id = "github-provider"
-  display_name                       = "Github Identity Pool Provider"
-  description                        = "Identity pool provider for Github Actions."
-  attribute_condition                = "attribute.repository in ['deepa3006/terraform-wif']"
+  workload_identity_pool_id          = google_iam_workload_identity_pool.wif_pool1.workload_identity_pool_id
+  workload_identity_pool_provider_id = "github-provider1"
+  display_name                       = "Github Identity Pool Provider1"
+  description                        = "Identity pool provider for Github Actions1."
+  attribute_condition                = "attribute.repository in ['deepa3006/terraform-wif-creation']"
   attribute_mapping = {
     "google.subject"             = "assertion.sub"
     "attribute.repository"       = "assertion.repository"
@@ -61,11 +61,11 @@ resource "google_iam_workload_identity_pool_provider" "wif_provider" {
   }
 }
 
-resource "google_service_account" "wif_service_account" {
+resource "google_service_account" "wif_service_account1" {
   project      = "utility-cumulus-372111"
-  account_id   = "github-actions"
-  display_name = "Github Actions CICD Service Account"
-  description  = "Service account used for Github Actions from repository \"deepa3006/terraform-wif\""
+  account_id   = "github-actions1"
+  display_name = "Github Actions CICD Service Accoun1t"
+  description  = "Service account used for Github Actions from repository \"deepa3006/terraform-wif-creation\""
 }
 
 data "google_iam_policy" "wif_service_account_policy" {
@@ -73,13 +73,13 @@ data "google_iam_policy" "wif_service_account_policy" {
     role = "roles/iam.workloadIdentityUser"
 
     members = [
-      "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.wif_pool.name}/attribute.ref_type/branch",
+      "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.wif_pool1.name}/attribute.ref_type/branch",
     ]
     
   }
 }
 
 resource "google_service_account_iam_policy" "wif_iam_policy_binding" {
-  service_account_id = google_service_account.wif_service_account.name
+  service_account_id = google_service_account.wif_service_account1.name
   policy_data        = data.google_iam_policy.wif_service_account_policy.policy_data
 }
